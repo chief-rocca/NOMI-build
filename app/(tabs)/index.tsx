@@ -1,31 +1,38 @@
-import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { useAuthStore } from '@/store/useAuthStore';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React from 'react';
+import { Text, View } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function DashboardScreen() {
+  const user = useAuthStore(state => state.user);
 
-export default function TabOneScreen() {
+  // Simple protection: Redirect if no user (Simulates protected route)
+  // In a real app we'd handle this more robustly in _layout
+  if (!user && !__DEV__) {
+    // return <Redirect href="/" />; 
+    // Commented out to avoid redirect loops during dev hot-reloads if session clears
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View className="flex-1 bg-gray-50 items-center justify-center p-6">
+      <View className="bg-white p-8 rounded-2xl shadow-sm items-center w-full">
+        <MaterialCommunityIcons name="shield-check" size={64} color={Colors.light.primary} />
+
+        <Text className="text-2xl font-bold text-gray-800 mt-4 mb-2">
+          Welcome, {user?.firstName || 'User'}!
+        </Text>
+
+        <Text className="text-gray-500 text-center mb-6">
+          You have successfully verified your simulated account.
+        </Text>
+
+        <View className="bg-blue-50 px-4 py-2 rounded-lg">
+          <Text className="text-blue-800 font-mono">
+            Session Active
+          </Text>
+        </View>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
