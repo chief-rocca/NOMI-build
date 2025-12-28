@@ -10,7 +10,7 @@ export default function LandingScreen() {
     const router = useRouter();
 
     const handleGoogleLogin = () => {
-        router.push('/modal'); // Opens the modal
+        router.push('/auth/google/email');
     };
 
     const handleFacebookLogin = () => {
@@ -18,7 +18,7 @@ export default function LandingScreen() {
     };
 
     const handleMobileLogin = () => {
-        router.push('/modal');
+        router.push('/auth/mobile/phone');
     };
 
     return (
@@ -27,8 +27,8 @@ export default function LandingScreen() {
 
             {/* Header / Logo Section */}
             <View className="items-center mt-10">
-                <View className="bg-white/20 p-6 rounded-full mb-6">
-                    <MaterialCommunityIcons name="shield-check" size={64} color={Colors.light.accent} />
+                <View className="bg-white/20 p-8 rounded-full mb-8">
+                    <MaterialCommunityIcons name="shield-check" size={80} color={Colors.light.accent} />
                 </View>
                 <Text className="text-4xl font-extrabold text-nomi-primary tracking-wider mb-2">
                     <Text className="text-nomi-accent">NO</Text>MI

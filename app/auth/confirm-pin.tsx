@@ -1,18 +1,20 @@
 import { Numpad } from '@/components/Numpad';
 import { Colors } from '@/constants/Colors';
-import { useAuthStore } from '@/store/useAuthStore';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { clsx } from 'clsx';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 
-
-export default function PinScreen() {
+export default function ConfirmPinScreen() {
     const router = useRouter();
     const [pin, setPin] = useState('');
     const maxPinLength = 5;
-    const user = useAuthStore(state => state.user);
+    const [error, setError] = useState<string | null>(null);
+
+    // In a real app, pass the first PIN via params to compare.
+    // For this mock, we'll assume any 5-digit PIN is "confirmed" or just accept it.
+    // Or better, let's just make them re-enter.
 
     const handlePress = (key: string) => {
         if (pin.length < maxPinLength) {
@@ -20,14 +22,9 @@ export default function PinScreen() {
             setPin(newPin);
 
             if (newPin.length === maxPinLength) {
-                // PIN Complete -> Navigate to "Dashboard" (Tabs)
-                // In real app, we would confirm PIN. Here we just assume it's set.
+                // Navigate to Biometric Permission
                 setTimeout(() => {
-                    // We are "logged in" so we can go to tabs?
-                    // Actually index is landing. We need a protected layout or redirect.
-                    // For now, let's pretend TabOne is Dashboard.
-                    // Go to Confirm PIN screen (Post-Auth Step 1)
-                    router.push('/auth/confirm-pin');
+                    router.push('/auth/permissions/biometric');
                 }, 300);
             }
         }
@@ -53,8 +50,8 @@ export default function PinScreen() {
                     <FontAwesome5 name="lock" size={48} color={Colors.light.accent} />
                 </View>
 
-                <Text className="text-3xl font-bold text-gray-800 mb-2">Create PIN</Text>
-                <Text className="text-gray-600 mb-14 text-lg">Set a 5-digit PIN for secure access</Text>
+                <Text className="text-3xl font-bold text-gray-800 mb-2">Confirm PIN</Text>
+                <Text className="text-gray-600 mb-14 text-lg">Re-enter your PIN to confirm</Text>
 
                 {/* Dots */}
                 <View className="flex-row gap-6 mb-16">
@@ -63,7 +60,8 @@ export default function PinScreen() {
                             key={i}
                             className={clsx(
                                 "w-5 h-5 rounded-full border-2 border-gray-400",
-                                i < pin.length ? "bg-white border-white" : "bg-transparent"
+                                i < pin.length ? "bg-white border-white" : "bg-transparent",
+                                // Add error state visuals if needed
                             )}
                         />
                     ))}
@@ -74,12 +72,8 @@ export default function PinScreen() {
 
             </View>
 
-            {/* Footer Info */}
             <View className="absolute bottom-10 w-full items-center">
-                <View className="bg-black/80 px-4 py-2 rounded-lg flex-row items-center">
-                    <FontAwesome name="exclamation-circle" size={16} color="red" />
-                    <Text className="text-white ml-2 text-xs">PIN is session-only (resets on restart)</Text>
-                </View>
+                <Text className="text-gray-500 text-xs">PIN expires after 12 months and cannot be reused</Text>
             </View>
 
         </SafeAreaView>

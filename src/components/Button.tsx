@@ -6,6 +6,7 @@ interface ButtonProps {
     onPress?: () => void;
     title: string;
     variant?: 'primary' | 'secondary' | 'outline' | 'white';
+    shape?: 'rounded' | 'squircle';
     isLoading?: boolean;
     disabled?: boolean;
     icon?: React.ReactNode;
@@ -16,13 +17,20 @@ export const Button = ({
     onPress,
     title,
     variant = 'primary',
+    shape = 'rounded',
     isLoading = false,
     disabled = false,
     icon,
     className
 }: ButtonProps) => {
 
-    const baseStyles = "h-14 rounded-full flex-row items-center justify-center px-6";
+    const baseStyles = "h-14 flex-row items-center justify-center px-6";
+
+    // Shape variants
+    const shapeStyles = {
+        rounded: "rounded-full",
+        squircle: "rounded-2xl"
+    };
 
     const variants = {
         primary: "bg-nomi-primary",
@@ -44,6 +52,7 @@ export const Button = ({
             disabled={isLoading || disabled}
             className={clsx(
                 baseStyles,
+                shapeStyles[shape],
                 variants[variant],
                 (disabled) && "opacity-50",
                 className

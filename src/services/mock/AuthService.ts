@@ -1,5 +1,5 @@
-import { CONFIG } from '@/src/constants/config';
-import { MOCK_USER, VALID_OTP } from '@/src/constants/mockData';
+import { CONFIG } from '@/constants/config';
+import { MOCK_USER } from '@/constants/mockData';
 import { AuthResponse } from '../api/auth.types';
 
 // Utility helper for random delay
@@ -26,7 +26,8 @@ export const AuthService = {
     verifyOtp: async (otp: string): Promise<AuthResponse> => {
         await simulateNetworkDelay();
 
-        if (otp === VALID_OTP) {
+        // Accept any 6 digit code for MVP
+        if (otp.length === 6) {
             return {
                 user: MOCK_USER,
                 session: {

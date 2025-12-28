@@ -1,0 +1,42 @@
+# Dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# Testing
+coverage
+
+# Expo
+.expo/
+*.jks
+*.p12
+*.key
+*.mobileprovision
+
+# Native
+# Ignore these if you are using Expo Prebuild (CNG)
+ios/
+android/
+
+# Build outputs
+dist/
+web-build/
+
+# macOS
+.DS_Store
+
+# Env
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Metro
+.metro/
+
