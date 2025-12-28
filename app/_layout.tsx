@@ -55,15 +55,14 @@ function RootLayoutNav() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="auth/otp" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/pin" options={{ headerShown: false }} />
-        <Stack.Screen name="auth/google/email" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/google/mobile" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/mobile/phone" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/mobile/email" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/confirm-pin" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/permissions/biometric" options={{ headerShown: false, animation: 'slide_from_right' }} />
-        <Stack.Screen name="auth/permissions/location" options={{ headerShown: false, animation: 'slide_from_right' }} />
+        <Stack.Screen name="auth/otp" options={{ presentation: 'transparentModal', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/pin" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/google/email" options={{ presentation: 'transparentModal', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/mobile/phone" options={{ presentation: 'transparentModal', animation: 'slide_from_right', headerShown: false }} />
+
+        <Stack.Screen name="auth/confirm-pin" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/permissions/biometric" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/permissions/location" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );
