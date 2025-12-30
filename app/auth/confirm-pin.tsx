@@ -1,8 +1,7 @@
 import { Numpad } from '@/components/Numpad';
-import { Colors } from '@/constants/Colors';
-import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { clsx } from 'clsx';
 import { useRouter } from 'expo-router';
+import { ArrowLeft, Lock } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { SafeAreaView, StatusBar, Text, View } from 'react-native';
 
@@ -24,8 +23,9 @@ export default function ConfirmPinScreen() {
             if (newPin.length === maxPinLength) {
                 // Navigate to Biometric Permission
                 setTimeout(() => {
+                    // Navigate to Permissions flow
                     router.push('/auth/permissions/biometric');
-                }, 300);
+                }, 1500);
             }
         }
     };
@@ -35,23 +35,23 @@ export default function ConfirmPinScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-nomi-bg">
-            <StatusBar barStyle="dark-content" />
+        <SafeAreaView className="flex-1 bg-nomi-dark-bg">
+            <StatusBar barStyle="light-content" />
 
             {/* Header */}
             <View className="px-6 py-4">
-                <FontAwesome name="arrow-left" size={24} color="#000" onPress={() => router.back()} />
+                <ArrowLeft size={24} color="white" onPress={() => router.back()} />
             </View>
 
             <View className="flex-1 items-center justify-center -mt-20">
 
                 {/* Icon */}
-                <View className="bg-white/30 p-8 rounded-full mb-10">
-                    <FontAwesome5 name="lock" size={48} color={Colors.light.accent} />
+                <View className="bg-gray-800 p-8 rounded-full mb-10">
+                    <Lock size={48} color="white" />
                 </View>
 
-                <Text className="text-3xl font-bold text-gray-800 mb-2">Confirm PIN</Text>
-                <Text className="text-gray-600 mb-14 text-lg">Re-enter your PIN to confirm</Text>
+                <Text className="text-3xl font-satoshi-bold text-white mb-2">Confirm PIN</Text>
+                <Text className="text-gray-400 mb-14 text-lg font-satoshi-medium">Re-enter your PIN to confirm</Text>
 
                 {/* Dots */}
                 <View className="flex-row gap-6 mb-16">
@@ -59,8 +59,8 @@ export default function ConfirmPinScreen() {
                         <View
                             key={i}
                             className={clsx(
-                                "w-5 h-5 rounded-full border-2 border-gray-400",
-                                i < pin.length ? "bg-white border-white" : "bg-transparent",
+                                "w-5 h-5 rounded-full border-2 border-gray-600",
+                                i < pin.length ? "bg-nomi-primary border-nomi-primary" : "bg-transparent",
                                 // Add error state visuals if needed
                             )}
                         />
@@ -73,7 +73,7 @@ export default function ConfirmPinScreen() {
             </View>
 
             <View className="absolute bottom-10 w-full items-center">
-                <Text className="text-gray-500 text-xs">PIN expires after 12 months and cannot be reused</Text>
+                <Text className="text-gray-500 text-xs font-satoshi-regular">PIN expires after 12 months and cannot be reused</Text>
             </View>
 
         </SafeAreaView>

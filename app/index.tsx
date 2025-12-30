@@ -1,71 +1,116 @@
-import { Button } from '@/components/Button';
-import { Colors } from '@/constants/Colors';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { Smartphone } from 'lucide-react-native';
 import React from 'react';
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LandingScreen() {
     const router = useRouter();
 
+    const handleAppleLogin = () => {
+        alert('Apple login coming soon.');
+    };
+
     const handleGoogleLogin = () => {
-        router.push('/auth/google/email');
+        // Route to new Mock Google Flow
+        router.push('/auth/google');
+    };
+
+    const handleNumberLogin = () => {
+        // "Number" flow (previously Email button routed here to mobile/phone, so this is consistent)
+        router.push('/auth/mobile/phone');
     };
 
     const handleFacebookLogin = () => {
         alert('Facebook login simulation not implemented in this flow.');
     };
 
-    const handleMobileLogin = () => {
-        router.push('/auth/mobile/phone');
-    };
+
+
+    const SigninButton = ({
+        title,
+        icon,
+        onPress,
+        isBrand = false
+    }: {
+        title: string;
+        icon: React.ReactNode;
+        onPress: () => void;
+        isBrand?: boolean;
+    }) => (
+        <TouchableOpacity
+            onPress={onPress}
+            className="w-full flex-row items-center justify-center py-4 px-6 rounded-full border border-gray-700 bg-nomi-dark-surface mb-3 active:bg-gray-800"
+        >
+            <View className="absolute left-6">
+                {icon}
+            </View>
+            <Text className="text-white font-satoshi-medium text-base text-center">
+                {title}
+            </Text>
+        </TouchableOpacity>
+    );
 
     return (
-        <SafeAreaView className="flex-1 bg-nomi-bg items-center justify-between py-10">
-            <StatusBar barStyle="dark-content" />
+        <SafeAreaView className="flex-1 bg-nomi-dark-bg px-6 justify-between py-4">
+            <StatusBar barStyle="light-content" />
 
-            {/* Header / Logo Section */}
-            <View className="items-center mt-10">
-                <View className="bg-white/20 p-8 rounded-full mb-8">
-                    <MaterialCommunityIcons name="shield-check" size={80} color={Colors.light.accent} />
+            {/* Header Section */}
+            <View className="flex-1 mt-12">
+                {/* Logo */}
+                <Text className="text-center text-3xl font-satoshi-bold text-white mb-20 tracking-wider">
+                    NOMI
+                </Text>
+
+
+                {/* Main Content */}
+                <View className="flex-1 justify-center pb-20">
+                    <Text className="text-4xl font-satoshi-bold text-white mb-10 text-center">
+                        Create your{'\n'}free account
+                    </Text>
+
+                    <View className="w-full">
+                        {/* Apple */}
+                        <SigninButton
+                            title="Continue with Apple"
+                            icon={<FontAwesome5 name="apple" size={20} color="white" />}
+                            onPress={handleAppleLogin}
+                            isBrand
+                        />
+
+                        {/* Google */}
+                        <SigninButton
+                            title="Continue with Google"
+                            icon={<FontAwesome5 name="google" size={18} color="white" />}
+                            onPress={handleGoogleLogin}
+                            isBrand
+                        />
+
+                        {/* Number */}
+                        <SigninButton
+                            title="Continue with Number"
+                            icon={<Smartphone size={20} color="white" />}
+                            onPress={handleNumberLogin}
+                        />
+
+                        {/* Facebook */}
+                        <SigninButton
+                            title="Continue with Facebook"
+                            icon={<FontAwesome5 name="facebook" size={18} color="white" />}
+                            onPress={handleFacebookLogin}
+                            isBrand
+                        />
+
+
+                    </View>
                 </View>
-                <Text className="text-4xl font-extrabold text-nomi-primary tracking-wider mb-2">
-                    <Text className="text-nomi-accent">NO</Text>MI
-                </Text>
-                <Text className="text-gray-700 text-lg font-medium">
-                    Anonymous Polling Platform
-                </Text>
-            </View>
-
-            {/* Action Buttons */}
-            <View className="w-full px-8 space-y-4">
-                <Button
-                    title="Sign up with Google"
-                    variant="white"
-                    onPress={handleGoogleLogin}
-                    icon={<FontAwesome name="google" size={20} color="#DB4437" />}
-                    className="mb-4"
-                />
-                <Button
-                    title="Sign up with Facebook"
-                    variant="white"
-                    onPress={handleFacebookLogin}
-                    icon={<FontAwesome name="facebook" size={20} color="#4267B2" />}
-                    className="mb-4"
-                />
-                <Button
-                    title="Use mobile number"
-                    variant="white"
-                    onPress={handleMobileLogin}
-                    icon={<FontAwesome name="mobile-phone" size={24} color="#333" />}
-                />
             </View>
 
             {/* Footer */}
-            <View className="px-10">
-                <Text className="text-center text-gray-600 text-sm leading-5">
-                    By signing up, you agree to our <Text className="text-nomi-primary font-bold">Terms</Text>. See how we use your data in our <Text className="text-nomi-primary font-bold">Privacy Policy</Text>.
+            <View className="pb-8">
+                <Text className="text-center text-gray-500 text-xs leading-5 px-4 font-satoshi-regular">
+                    By creating an account, you agree to the <Text className="text-white underline">Terms of Service</Text> & acknowledge our <Text className="text-white underline">Privacy Policy</Text>.
                 </Text>
             </View>
         </SafeAreaView>

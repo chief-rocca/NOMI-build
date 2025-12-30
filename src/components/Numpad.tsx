@@ -1,6 +1,6 @@
-import { FontAwesome5 } from '@expo/vector-icons';
 import { clsx } from 'clsx';
 import * as Haptics from 'expo-haptics';
+import { Delete } from 'lucide-react-native';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
@@ -45,13 +45,13 @@ export const Numpad = ({ onPress, onDelete }: NumpadProps) => {
                                 onPress={() => handlePress(key)}
                                 className={clsx(
                                     "w-20 h-20 rounded-full justify-center items-center",
-                                    isDelete ? "bg-transparent" : "bg-white/30"
+                                    isDelete ? "bg-transparent" : "bg-gray-800 active:bg-gray-700"
                                 )}
                             >
                                 {isDelete ? (
-                                    <FontAwesome5 name="backspace" size={24} color="#333" />
+                                    <Delete size={28} color="#EAEAEA" />
                                 ) : (
-                                    <Text className="text-3xl font-semibold text-gray-800">{key}</Text>
+                                    <Text className="text-3xl font-satoshi-bold text-white">{key}</Text>
                                 )}
                             </TouchableOpacity>
                         );

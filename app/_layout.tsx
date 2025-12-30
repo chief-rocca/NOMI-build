@@ -22,13 +22,20 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+// ... (existing imports)
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'Satoshi-Bold': require('../assets/fonts/Satoshi-Bold.otf'),
+    'Satoshi-Medium': require('../assets/fonts/Satoshi-Medium.otf'),
+    'Satoshi-Light': require('../assets/fonts/Satoshi-Light.otf'),
+    'Satoshi-Regular': require('../assets/fonts/Satoshi-Regular.otf'),
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -43,7 +50,11 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootLayoutNav />
+    </GestureHandlerRootView>
+  );
 }
 
 function RootLayoutNav() {
@@ -62,7 +73,13 @@ function RootLayoutNav() {
 
         <Stack.Screen name="auth/confirm-pin" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
         <Stack.Screen name="auth/permissions/biometric" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/id-scan" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
         <Stack.Screen name="auth/permissions/location" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="auth/permissions/notifications" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+
+        <Stack.Screen name="profile/index" options={{ presentation: 'card', headerShown: false }} />
+        <Stack.Screen name="profile/manage" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
+        <Stack.Screen name="settings/index" options={{ presentation: 'modal', headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

@@ -1,11 +1,10 @@
 import { Button } from '@/components/Button'; // Assuming Button is available
-import { Colors } from '@/constants/Colors';
 import { AuthService } from '@/services/mock/AuthService';
 import { useAuthStore } from '@/store/useAuthStore';
-import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Mail } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StatusBar, Text, View } from 'react-native';
 import { OtpInput } from 'react-native-otp-entry';
 
 export default function OtpScreen() {
@@ -43,29 +42,30 @@ export default function OtpScreen() {
     };
 
     return (
-        <View className="flex-1 bg-black/50 justify-center items-center px-6">
+        <View className="flex-1 bg-nomi-dark-bg justify-center items-center px-6">
+            <StatusBar barStyle="light-content" />
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="w-full"
             >
-                <View className="bg-white w-full rounded-3xl p-6 shadow-xl items-center">
+                <View className="bg-nomi-dark-surface w-full rounded-3xl p-6 shadow-xl items-center border border-gray-800">
 
                     {/* Header Icon */}
-                    <View className="bg-blue-50 p-6 rounded-full mb-6">
-                        <FontAwesome name="envelope-o" size={40} color={Colors.light.accent} />
+                    <View className="bg-gray-800 p-6 rounded-full mb-6">
+                        <Mail size={40} color="#4285F4" />
                     </View>
 
-                    <Text className="text-2xl font-bold text-gray-800 mb-2">Verify OTP</Text>
-                    <Text className="text-gray-600 text-center mb-8">
+                    <Text className="text-2xl font-satoshi-bold text-white mb-2">Verify OTP</Text>
+                    <Text className="text-gray-400 text-center mb-8 font-satoshi-medium">
                         Enter the 6-digit code sent to {'\n'}
-                        <Text className="font-bold">{phone || '+1234567890'}</Text>
+                        <Text className="font-bold text-white">{phone || '+1234567890'}</Text>
                     </Text>
 
                     {/* OTP Input */}
                     <View className="w-full h-16 mb-6">
                         <OtpInput
                             numberOfDigits={6}
-                            focusColor={Colors.light.primary}
+                            focusColor="#4285F4"
                             focusStickBlinkingDuration={500}
                             onTextChange={(text) => {
                                 if (error) setError(null);
@@ -73,26 +73,28 @@ export default function OtpScreen() {
                             onFilled={(text) => handleOtpFilled(text)}
                             theme={{
                                 pinCodeContainerStyle: {
-                                    backgroundColor: '#F3F4F6', // light gray
+                                    backgroundColor: '#1E1E1E', // Darker gray
                                     borderRadius: 8,
                                     width: 45,
                                     height: 55,
-                                    borderWidth: 0,
+                                    borderWidth: 1,
+                                    borderColor: '#333'
                                 },
                                 pinCodeTextStyle: {
-                                    color: 'black',
+                                    color: 'white',
                                     fontSize: 24,
                                     fontWeight: 'bold',
+                                    fontFamily: 'Satoshi-Bold'
                                 }
                             }}
                         />
                     </View>
 
                     {error && (
-                        <Text className="text-red-500 font-bold mb-4">{error}</Text>
+                        <Text className="text-red-500 font-satoshi-bold mb-4">{error}</Text>
                     )}
 
-                    <Text className="text-nomi-primary text-xs italic mb-8">
+                    <Text className="text-blue-400 text-xs italic mb-8 font-satoshi-regular">
                         (Simulated - enter any 6 digits or 123456)
                     </Text>
 
@@ -105,7 +107,7 @@ export default function OtpScreen() {
                         isLoading={loading}
                     />
                     {/* Or just a 'Cancel' / 'Back' button */}
-                    <Text className="text-gray-400 mt-4" onPress={() => router.back()}>Cancel</Text>
+                    <Text className="text-gray-500 mt-4 font-satoshi-medium" onPress={() => router.back()}>Cancel</Text>
                 </View>
             </KeyboardAvoidingView>
         </View>

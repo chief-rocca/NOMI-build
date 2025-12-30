@@ -1,13 +1,15 @@
 import { Button } from '@/components/Button';
 import { DataInput } from '@/components/DataInput';
 import { AuthService } from '@/services/mock/AuthService';
-import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Mail, Smartphone } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, LayoutAnimation, Platform, StatusBar, Text, View } from 'react-native';
 
 export default function MobilePhoneScreen() {
     const router = useRouter();
+    const params = useLocalSearchParams();
+    const googleEmail = params.googleEmail as string | undefined;
 
     // State for Wizard Step
     const [step, setStep] = useState<'phone' | 'email'>('phone');
@@ -20,15 +22,27 @@ export default function MobilePhoneScreen() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        if (googleEmail) {
+            setEmail(googleEmail);
+        }
+    }, [googleEmail]);
+
     const handleContinuePhone = () => {
         if (phoneNumber.length < 5) {
             setError('Please enter a valid phone number');
             return;
         }
         setError(null);
-        // Animate transition to next step
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-        setStep('email');
+
+        // If we already have a Google Email, skip the email step and go straight to OTP
+        if (googleEmail) {
+            handleSendOtp();
+        } else {
+            // Animate transition to next step
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+            setStep('email');
+        }
     };
 
     const handleBackToPhone = () => {
@@ -47,7 +61,7 @@ export default function MobilePhoneScreen() {
 
             router.push({
                 pathname: '/auth/otp',
-                params: { phone: phoneNumber, context: 'mobile', email }
+                params: { phone: phoneNumber, context: 'mobile', email: email || googleEmail }
             });
             // No need to set loading false if we navigate away, but safe to do so
         } catch (e: any) {
@@ -59,7 +73,7 @@ export default function MobilePhoneScreen() {
     };
 
     return (
-        <View className="flex-1 bg-black/50 px-6 justify-center items-center">
+        <View className="flex-1 bg-nomi-dark-bg px-6 justify-center items-center">
             <StatusBar barStyle="light-content" />
 
             {/* Interactive Content - Inside KAV */}
@@ -67,17 +81,17 @@ export default function MobilePhoneScreen() {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 className="w-full z-10 justify-center items-center p-6"
             >
-                <View className="bg-white w-full rounded-3xl p-6 shadow-xl space-y-6">
+                <View className="bg-nomi-dark-bg w-full rounded-3xl p-6 space-y-6">
 
                     {step === 'phone' ? (
                         /* STEP 1: PHONE */
                         <>
                             <View className="flex-row items-center mb-2">
-                                <FontAwesome name="mobile-phone" size={32} color="#333" />
-                                <Text className="text-2xl font-bold ml-3 text-gray-800">Mobile Login</Text>
+                                <Smartphone size={32} color="#EAEAEA" />
+                                <Text className="text-2xl font-satoshi-bold ml-3 text-white">Mobile Login</Text>
                             </View>
 
-                            <Text className="text-gray-600 text-base">
+                            <Text className="text-gray-300 text-base font-satoshi-medium">
                                 Enter your mobile number to sign up:
                             </Text>
 
@@ -100,15 +114,16 @@ export default function MobilePhoneScreen() {
                                         title="Cancel"
                                         variant="secondary"
                                         shape="squircle"
-                                        className="bg-gray-100"
+                                        className="bg-gray-800"
                                         onPress={() => router.back()}
                                     />
                                 </View>
                                 <View className="flex-1">
                                     <Button
-                                        title="Continue"
+                                        title={googleEmail ? "Send OTP" : "Continue"}
                                         variant="primary"
                                         shape="squircle"
+                                        isLoading={loading && !!googleEmail}
                                         onPress={handleContinuePhone}
                                     />
                                 </View>
@@ -118,11 +133,11 @@ export default function MobilePhoneScreen() {
                         /* STEP 2: EMAIL */
                         <>
                             <View className="flex-row items-center mb-2">
-                                <FontAwesome name="envelope-o" size={28} color="#0d47a1" />
-                                <Text className="text-2xl font-bold ml-3 text-gray-800">2-Step Verification</Text>
+                                <Mail size={28} color="#4285F4" />
+                                <Text className="text-2xl font-satoshi-bold ml-3 text-white">2-Step Verification</Text>
                             </View>
 
-                            <Text className="text-gray-600 text-base">
+                            <Text className="text-gray-300 text-base font-satoshi-medium">
                                 Please provide your email address to validate your account sign up:
                             </Text>
 
@@ -139,7 +154,7 @@ export default function MobilePhoneScreen() {
                             />
 
                             {error && (
-                                <Text className="text-red-500 font-bold">{error}</Text>
+                                <Text className="text-red-500 font-bold font-satoshi-bold">{error}</Text>
                             )}
 
                             <View className="flex-row gap-4">
@@ -148,7 +163,7 @@ export default function MobilePhoneScreen() {
                                         title="Back"
                                         variant="secondary"
                                         shape="squircle"
-                                        className="bg-gray-100"
+                                        className="bg-gray-800"
                                         onPress={handleBackToPhone}
                                     />
                                 </View>

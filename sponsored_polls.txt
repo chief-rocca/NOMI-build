@@ -1,0 +1,109 @@
+1. Telecommunications & Fiber (Targeted by Suburb)
+"Which factor is the primary reason you haven't upgraded to a 1Gbps fiber line in your current residence?"
+
+A) Monthly subscription cost is too high
+
+B) Current speed (100Mbps/200Mbps) is sufficient
+
+C) Unreliable uptime in my specific neighborhood
+
+D) Installation/In-home wiring is too difficult
+
+2. Retail & Grocery (Targeted by Proximity to Malls)
+"When using a 60-minute delivery app (e.g., Sixty60, ASAP), which category are you most likely to 'impulse buy' that wasn't on your list?"
+
+A) Fresh Bakery/Ready-to-eat meals
+
+B) Alcohol & Beverages
+
+C) Household cleaning supplies
+
+D) Health & Beauty products
+
+3. Renewable Energy & Solar (Targeted by Property Type)
+"Which financing structure would most likely convince you to move your residence to a full solar hybrid system this year?"
+
+A) Fixed monthly 'Power Purchase' rental agreement
+
+B) Upfront purchase with a 5-year tax incentive
+
+C) Rent-to-own model integrated into my home loan
+
+D) Community-shared solar grid for my complex/street
+
+4. Banking & Fintech (Targeted by Income Tier/Location)
+"Which digital feature would be the 'deal-breaker' that makes you switch your primary salary-receiving bank account?"
+
+A) Zero-fee international currency accounts
+
+B) Real-time, AI-powered credit limit increases
+
+C) Seamless integration with crypto/digital assets
+
+D) Exclusive lifestyle rewards (Lounge access, travel discounts)
+
+5. Automotive & EV (Targeted by Residential Verification)
+"If your local shopping center installed Ultra-Fast EV Charging, how much more time would you spend at that location weekly?"
+
+A) 1-2 hours (I'd do my weekly shopping there)
+
+B) 30-60 mins (I'd grab a coffee/quick errand)
+
+C) No change (I'd charge and leave)
+
+D) Not applicable (I don't plan on buying an EV)
+
+6. Real Estate & Development (Targeted by GPS History)
+"What is the most important 'Lifestyle Amenity' you look for when considering a new residential development in this area?"
+
+A) On-site co-working spaces and high-speed Wi-Fi
+
+B) High-end fitness center and padel courts
+
+C) Sustainable features (Off-grid water/electricity)
+
+D) Advanced 24/7 biometric security and AI-surveillance
+
+7. Insurance & Risk (Targeted by Postcode)
+"Does your current household insurance provider offer a discount for 'Smart Home' security integrations installed at your address?"
+
+A) Yes, and I am currently using it
+
+B) No, but I would switch for a 10% discount
+
+C) I am unsure what my policy covers regarding smart tech
+
+D) I do not have household insurance
+
+8. Quick Service Restaurants (QSR) (Targeted by Lunchtime Location)
+"Which 'Healthy Alternative' menu item are you most likely to order during a workday lunch in this district?"
+
+A) Plant-based/Vegan protein bowls
+
+B) Low-carb/Keto-friendly wraps
+
+C) Cold-pressed juices and smoothie meal-replacements
+
+D) I prefer traditional fast-food options
+
+9. Luxury Goods (Targeted by High-Value Residential Areas)
+"When purchasing high-end electronics, which 'Value-Add' service do you prioritize most?"
+
+A) Extended 3-year 'accidental damage' warranty
+
+B) On-site home installation and optimization
+
+C) Guaranteed buy-back/Trade-in value after 2 years
+
+D) Concierge-level technical support 24/7
+
+10. Health & Wellness (Targeted by City/Metro)
+"Would you be willing to share your anonymized wearable health data (Apple Health/Fitbit) with a local gym for a personalized membership discount?"
+
+A) Yes, I’m happy to exchange data for lower fees
+
+B) Only if the data is 100% anonymized and encrypted
+
+C) No, my health data is private regardless of the discount
+
+D) I don't use wearable health tracking devices
