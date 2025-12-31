@@ -67,24 +67,31 @@ export default function SettingsScreen() {
                     {/* Preferences */}
                     <SectionHeader title="Preferences" />
 
-                    <MenuItem title="Manage Notifications" />
-                    <MenuItem title="Theme" subTitle="Match System" />
+                    <MenuItem title="Manage Notifications" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Theme" subTitle="Match System" onPress={() => router.push('/coming-soon')} />
 
                     {/* Support */}
                     <SectionHeader title="Support" />
-                    <MenuItem title="Feedback & Help" />
-                    <MenuItem title="FAQ" />
-                    <MenuItem title="Help Center" />
-                    <MenuItem title="Share NOMI" />
-                    <MenuItem title="Suggest Feature" />
+                    <MenuItem title="Feedback & Help" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="FAQ" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Help Center" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Share NOMI" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Suggest Feature" onPress={() => router.push('/coming-soon')} />
 
                     {/* About */}
                     <SectionHeader title="About" />
-                    <MenuItem title="About NOMI" />
-                    <MenuItem title="Polling System" />
-                    <MenuItem title="Terms & Conditions" />
-                    <MenuItem title="Privacy Policy" />
-                    <MenuItem title="Sign Out" />
+                    <MenuItem title="About NOMI" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Polling System" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Terms & Conditions" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem title="Privacy Policy" onPress={() => router.push('/coming-soon')} />
+                    <MenuItem
+                        title="Sign Out"
+                        onPress={() => {
+                            // Reset navigation to initial state
+                            router.dismissAll();
+                            router.replace('/');
+                        }}
+                    />
 
                     <View className="items-center py-8">
                         <Text className="text-gray-500 text-xs">NOMI v1.0.0 (1)</Text>

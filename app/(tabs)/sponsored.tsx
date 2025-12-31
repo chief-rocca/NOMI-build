@@ -1,11 +1,41 @@
-import { Gift, ScrollText } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { Gift, Globe, ScrollText, UserCircle } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { FlatList, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwipeablePollCard } from '../../src/components/SwipeablePollCard';
-import { sponsoredBinaryPolls, sponsoredPollsData } from '../data/sponsoredPolls';
+import { sponsoredBinaryPolls, sponsoredPollsData } from '../../src/data/sponsoredPolls';
+// Import Images
+const IMG_1 = require('../../assets/images/2025-02-21-inv-wiesbaden-map-promos-threeByTwoMediumAt2X-v9.webp');
+const IMG_2 = require('../../assets/images/30edsall-mlvj-videoLarge.webp');
+const IMG_3 = require('../../assets/images/30int-israel-ngo01-photo-qbcw-threeByTwoMediumAt2X.webp');
+
+const POLL_IMAGES = [IMG_1, IMG_2, IMG_3];
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export default function SponsoredScreen() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<'Questionnaires' | 'Rewards'>('Questionnaires');
+
+    // Header Animation Logic
+    const scrollY = useSharedValue(0);
+    const headerHeight = 60;
+
+    const scrollHandler = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            scrollY.value = event.contentOffset.y;
+        },
+    });
+
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            height: interpolate(scrollY.value, [0, headerHeight], [headerHeight, 0], Extrapolation.CLAMP),
+            opacity: interpolate(scrollY.value, [0, headerHeight / 2], [1, 0], Extrapolation.CLAMP),
+            overflow: 'hidden',
+        };
+    });
 
     const TabPill = ({ label, icon: Icon }: { label: 'Questionnaires' | 'Rewards', icon: any }) => (
         <TouchableOpacity
@@ -36,15 +66,24 @@ export default function SponsoredScreen() {
     return (
         <View className="flex-1 bg-nomi-dark-bg">
             <StatusBar barStyle="light-content" />
-            <SafeAreaView className="flex-1">
-                {/* Header */}
-                <View className="flex-row justify-between items-center px-6 py-4">
-                    <View>
-                        <Text className="text-3xl font-bold text-white tracking-tighter">
-                            NOMI <Text className="text-nomi-dark-primary text-3xl">Sponsored</Text>
-                        </Text>
+            <SafeAreaView className="flex-1" edges={['top']}>
+                {/* Collapsible Header */}
+                <Animated.View style={headerStyle}>
+                    <View className="flex-row justify-between items-center px-4 h-full">
+                        <TouchableOpacity onPress={() => router.push('/profile')}>
+                            <UserCircle size={32} color="#EAEAEA" />
+                        </TouchableOpacity>
+
+                        <View className="items-center">
+                            <Text className="text-xs text-nomi-dark-subtext uppercase tracking-widest font-satoshi-light">SPONSORED</Text>
+                            <Text className="text-2xl text-nomi-dark-text font-satoshi-bold">NOMI</Text>
+                        </View>
+
+                        <TouchableOpacity>
+                            <Globe size={28} color="#EAEAEA" />
+                        </TouchableOpacity>
                     </View>
-                </View>
+                </Animated.View>
 
                 {/* Tabs */}
                 <View className="py-2 h-16 mb-2">
@@ -56,10 +95,10 @@ export default function SponsoredScreen() {
 
                 {/* Content */}
                 {activeTab === 'Questionnaires' ? (
-                    <FlatList
+                    <AnimatedFlatList
                         data={combinedPolls}
-                        keyExtractor={(item, index) => `sponsored-combo-${index}`}
-                        renderItem={({ item, index }) => (
+                        keyExtractor={(item: any, index: number) => `sponsored-combo-${index}`}
+                        renderItem={({ item, index }: { item: any, index: number }) => (
                             <View className="px-6 mb-2">
                                 <SwipeablePollCard
                                     poll={{
@@ -73,6 +112,8 @@ export default function SponsoredScreen() {
                                         insightColor: item.insightColor || 'blue',
                                         // Ensure options exists even for binary if required by types (though they won't be used for binary rendering logic ideally)
                                         // The SwipeablePollCard logic handles 'binary' type correctly by ignoring options array.
+                                        image: POLL_IMAGES[index % POLL_IMAGES.length], // Cyclic images
+                                        type: (item as any).type || 'binary' // Explicit fallback/cast
                                     }}
                                     onSwipeLeft={() => { }}
                                     onSwipeRight={() => { }}
@@ -81,6 +122,8 @@ export default function SponsoredScreen() {
                         )}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingBottom: 100 }}
+                        onScroll={scrollHandler}
+                        scrollEventThrottle={16}
                     />
                 ) : (
                     <View className="flex-1 justify-center items-center px-8">

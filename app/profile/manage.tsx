@@ -1,84 +1,105 @@
 import { useRouter } from 'expo-router';
-import { ChevronLeft, Lock, Mail, MapPin, Phone, Power } from 'lucide-react-native';
+import { ArrowLeft, Lock, Mail, MapPin, User } from 'lucide-react-native';
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function ManageAccountScreen() {
     const router = useRouter();
-
-    const InfoRow = ({ label, value, icon: Icon, onEdit }: { label: string, value: string, icon: any, onEdit?: () => void }) => (
-        <View className="mb-6 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
-            <View className="flex-row items-center mb-2">
-                <Icon size={16} color="#9CA3AF" />
-                <Text className="text-gray-400 text-sm ml-2 font-medium">{label}</Text>
-            </View>
-            <View className="flex-row justify-between items-center">
-                <Text className="text-white text-lg font-satoshi-medium">{value}</Text>
-                {onEdit && (
-                    <TouchableOpacity onPress={onEdit}>
-                        <Text className="text-nomi-primary font-bold text-sm">Change</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
-        </View>
-    );
 
     return (
         <View className="flex-1 bg-nomi-dark-bg">
             <StatusBar barStyle="light-content" />
             <SafeAreaView className="flex-1">
+
                 {/* Header */}
-                <View className="flex-row items-center px-4 py-4 border-b border-gray-800">
-                    <TouchableOpacity onPress={() => router.back()} className="mr-4">
-                        <ChevronLeft size={28} color="white" />
+                <View className="flex-row items-center justify-between px-4 py-3">
+                    <TouchableOpacity onPress={() => router.back()} className="p-2">
+                        <ArrowLeft size={24} color="white" />
                     </TouchableOpacity>
-                    <Text className="text-white text-xl font-bold">Manage Account</Text>
+                    <Text className="text-white text-lg font-bold">Manage Account</Text>
+                    <View className="w-10" />
                 </View>
 
-                <ScrollView className="flex-1 px-4 py-6" showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false} className="px-6 pt-4">
 
-                    <View className="mb-8">
-                        <Text className="text-gray-500 text-sm mb-1 uppercase tracking-wider font-satoshi-bold">User Identity</Text>
+                    {/* Profile Picture Placeholder */}
+                    <View className="items-center mb-8">
+                        <View className="w-24 h-24 bg-gray-800 rounded-full items-center justify-center mb-3 border border-gray-700">
+                            <User size={40} color="#666" />
+                        </View>
+                        <Text className="text-nomi-dark-primary font-bold">Edit Photo</Text>
                     </View>
 
-                    <InfoRow
-                        label="Phone Number"
-                        value="+1 (555) 019-2834"
-                        icon={Phone}
-                        onEdit={() => console.log('Edit Phone')}
-                    />
+                    {/* Fields */}
+                    <View className="gap-6">
+                        <View>
+                            <Text className="text-gray-400 text-sm mb-2 font-medium ml-1">Display Name</Text>
+                            <View className="flex-row items-center bg-gray-900 border border-gray-800 rounded-xl px-4 py-3">
+                                <User size={18} color="#666" />
+                                <TextInput
+                                    className="flex-1 text-white ml-3 text-base"
+                                    value="NOMI Citizen"
+                                    editable={false}
+                                />
+                            </View>
+                        </View>
 
-                    <InfoRow
-                        label="Email Address"
-                        value="junii@nomi.com"
-                        icon={Mail}
-                        onEdit={() => console.log('Edit Email')}
-                    />
+                        <View>
+                            <Text className="text-gray-400 text-sm mb-2 font-medium ml-1">Email</Text>
+                            <View className="flex-row items-center bg-gray-900 border border-gray-800 rounded-xl px-4 py-3">
+                                <Mail size={18} color="#666" />
+                                <TextInput
+                                    className="flex-1 text-white ml-3 text-base"
+                                    value="citizen@nomi.app"
+                                    editable={false}
+                                />
+                            </View>
+                        </View>
 
-                    <InfoRow
-                        label="Region Verification"
-                        value="United States"
-                        icon={MapPin}
-                        onEdit={() => console.log('Edit Region')}
-                    />
+                        <View>
+                            <Text className="text-gray-400 text-sm mb-2 font-medium ml-1">Location</Text>
+                            <View className="flex-row items-center bg-gray-900 border border-gray-800 rounded-xl px-4 py-3">
+                                <MapPin size={18} color="#666" />
+                                <TextInput
+                                    className="flex-1 text-white ml-3 text-base"
+                                    value="Global"
+                                    editable={false}
+                                />
+                            </View>
+                        </View>
 
-                    <TouchableOpacity className="mt-8 mb-4 border border-gray-700 bg-gray-800 py-4 rounded-xl flex-row justify-center items-center gap-2">
-                        <Lock size={18} color="white" />
-                        <Text className="text-white font-bold">Password Management</Text>
-                    </TouchableOpacity>
+                        {/* Demographics Area */}
+                        <View className="mt-4 pt-6 border-t border-gray-800">
+                            <Text className="text-white font-bold text-lg mb-4">Demographics</Text>
+                            <Text className="text-gray-500 text-sm mb-6 leading-5">
+                                Your demographic data helps us ensure balanced polling results. This information is kept private and never shared directly.
+                            </Text>
 
-                    <TouchableOpacity className="mb-4 border border-yellow-900/50 bg-yellow-900/10 py-4 rounded-xl flex-row justify-center items-center gap-2">
-                        <Power size={18} color="#EAB308" />
-                        <Text className="text-yellow-500 font-bold">Deactivate Account</Text>
-                    </TouchableOpacity>
+                            <View className="gap-4">
+                                <View className="flex-row justify-between items-center bg-gray-900 p-4 rounded-xl border border-gray-800">
+                                    <View className="flex-row items-center gap-3">
+                                        <Lock size={20} color="#A0A0A0" />
+                                        <View>
+                                            <Text className="text-white font-medium">Password</Text>
+                                            <Text className="text-gray-500 text-xs mt-0.5">Last changed 30d ago</Text>
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity>
+                                        <Text className="text-nomi-dark-primary font-bold text-sm">Reset</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
 
-                    <TouchableOpacity className="border border-red-900/50 bg-red-900/10 py-4 rounded-xl items-center">
-                        <Text className="text-red-500 font-bold">Delete Account</Text>
-                    </TouchableOpacity>
-
-                    <View className="items-center mt-10">
-                        <Text className="text-gray-600 text-xs">NOMI Identity Protection Active</Text>
                     </View>
+
+                    <TouchableOpacity className="mt-12 mb-6 items-center">
+                        <Text className="text-gray-500 font-bold text-base uppercase tracking-wider">Deactivate Account</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity className="mb-20 items-center">
+                        <Text className="text-red-900/60 font-bold text-sm">Delete Account</Text>
+                    </TouchableOpacity>
 
                 </ScrollView>
             </SafeAreaView>

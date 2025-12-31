@@ -62,10 +62,10 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
         <Stack.Screen name="auth/otp" options={{ presentation: 'transparentModal', animation: 'slide_from_right', headerShown: false }} />
         <Stack.Screen name="auth/pin" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
         <Stack.Screen name="auth/google/email" options={{ presentation: 'transparentModal', animation: 'slide_from_right', headerShown: false }} />
@@ -80,6 +80,7 @@ function RootLayoutNav() {
         <Stack.Screen name="profile/index" options={{ presentation: 'card', headerShown: false }} />
         <Stack.Screen name="profile/manage" options={{ presentation: 'card', animation: 'slide_from_right', headerShown: false }} />
         <Stack.Screen name="settings/index" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="stats/globe" options={{ presentation: 'transparentModal', animation: 'fade', headerShown: false }} />
       </Stack>
     </ThemeProvider>
   );

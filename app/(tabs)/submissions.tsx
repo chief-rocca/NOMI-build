@@ -1,12 +1,11 @@
 import * as Haptics from 'expo-haptics';
-import { Check, ClipboardList, Flag, Globe, MapPin, Plus, Search, X } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
+import { Check, ClipboardList, Flag, Globe, MapPin, Plus, Search, UserCircle, X } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
-    SafeAreaView,
-    ScrollView,
     StatusBar,
     Text,
     TextInput,
@@ -14,7 +13,18 @@ import {
     TouchableWithoutFeedback,
     View
 } from 'react-native';
-import Animated, { FadeIn, FadeOut, ZoomIn } from 'react-native-reanimated';
+import Animated, {
+    Extrapolation,
+    FadeIn,
+    FadeOut,
+    ZoomIn,
+    interpolate,
+    useAnimatedScrollHandler,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming
+} from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Emoji Chips Data
 const EMOJI_CHIPS = [
@@ -60,6 +70,7 @@ const EMOJI_CHIPS = [
 ];
 
 export default function SubmissionsScreen() {
+    const router = useRouter();
     // State
     const [region, setRegion] = useState<'Global' | 'National' | 'Local'>('Global');
     const [searchQuery, setSearchQuery] = useState('');
@@ -69,6 +80,48 @@ export default function SubmissionsScreen() {
     const [options, setOptions] = useState<string[]>(['', '']);
     const [submitted, setSubmitted] = useState(false);
     const [showComingSoon, setShowComingSoon] = useState(false);
+
+    // Scroll Animation Logic
+    const scrollY = useSharedValue(0);
+    const lastScrollY = useSharedValue(0);
+    const buttonTranslateY = useSharedValue(0);
+    const headerHeight = 60;
+
+    const scrollHandler = useAnimatedScrollHandler({
+        onScroll: (event) => {
+            const currentY = event.contentOffset.y;
+            const diff = currentY - lastScrollY.value;
+
+            // Header/Button Logic
+            // If scrolling down (diff > 0) and moved more than 10 units -> Hide (Translate down)
+            if (currentY <= 0) {
+                buttonTranslateY.value = withTiming(0, { duration: 300 });
+            } else if (diff > 10) {
+                buttonTranslateY.value = withTiming(100, { duration: 300 }); // Hide
+            } else if (diff < -10) {
+                buttonTranslateY.value = withTiming(0, { duration: 300 }); // Show
+            }
+
+            scrollY.value = currentY;
+            lastScrollY.value = currentY;
+        },
+    });
+
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            height: interpolate(scrollY.value, [0, headerHeight], [headerHeight, 0], Extrapolation.CLAMP),
+            opacity: interpolate(scrollY.value, [0, headerHeight / 2], [1, 0], Extrapolation.CLAMP),
+            overflow: 'hidden',
+        };
+    });
+
+    const buttonAnimatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateY: buttonTranslateY.value }],
+            opacity: interpolate(buttonTranslateY.value, [0, 100], [1, 0], Extrapolation.CLAMP)
+        };
+    });
+
 
     // Filter Logic
     const filteredChips = useMemo(() => {
@@ -179,15 +232,24 @@ export default function SubmissionsScreen() {
     return (
         <View className="flex-1 bg-nomi-dark-bg">
             <StatusBar barStyle="light-content" />
-            <SafeAreaView className="flex-1">
-                {/* Header */}
-                <View className="flex-row justify-between items-center px-6 py-4">
-                    <View>
-                        <Text className="text-3xl font-bold text-white tracking-tighter">
-                            NOMI <Text className="text-nomi-dark-primary text-3xl">Submissions</Text>
-                        </Text>
+            <SafeAreaView className="flex-1" edges={['top']}>
+                {/* Unified Header */}
+                <Animated.View style={headerStyle}>
+                    <View className="flex-row justify-between items-center px-4 h-full">
+                        <TouchableOpacity onPress={() => router.push('/profile')}>
+                            <UserCircle size={32} color="#EAEAEA" />
+                        </TouchableOpacity>
+
+                        <View className="items-center">
+                            <Text className="text-xs text-nomi-dark-subtext uppercase tracking-widest font-satoshi-light">SUBMISSIONS</Text>
+                            <Text className="text-2xl text-nomi-dark-text font-satoshi-bold">NOMI</Text>
+                        </View>
+
+                        <TouchableOpacity>
+                            <Globe size={28} color="#EAEAEA" />
+                        </TouchableOpacity>
                     </View>
-                </View>
+                </Animated.View>
 
                 <KeyboardAvoidingView
                     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -196,15 +258,20 @@ export default function SubmissionsScreen() {
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View className="flex-1">
 
-                            <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
+                            <Animated.ScrollView
+                                className="flex-1 px-6"
+                                showsVerticalScrollIndicator={false}
+                                onScroll={scrollHandler}
+                                scrollEventThrottle={16}
+                            >
 
                                 {/* Region Selector */}
                                 <View className="flex-row mb-6 mt-2">
-                                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                    <Animated.ScrollView horizontal showsHorizontalScrollIndicator={false}>
                                         <RegionPill label="Global" icon={Globe} />
                                         <RegionPill label="National" icon={Flag} />
                                         <RegionPill label="Local" icon={MapPin} />
-                                    </ScrollView>
+                                    </Animated.ScrollView>
                                 </View>
 
                                 {/* Topic Section */}
@@ -358,10 +425,13 @@ export default function SubmissionsScreen() {
                                 )}
 
                                 <View className="h-32" />
-                            </ScrollView>
+                            </Animated.ScrollView>
 
-                            {/* Sticky Submit Button */}
-                            <View className="absolute bottom-4 left-6 right-6">
+                            {/* Sticky Submit Button with Scroll Animation */}
+                            <Animated.View
+                                className="absolute bottom-4 left-6 right-6"
+                                style={buttonAnimatedStyle}
+                            >
                                 <TouchableOpacity
                                     onPress={handleSubmit}
                                     disabled={!selectedTopic || !question || (pollType === 'multi' && options.some(o => !o))}
@@ -375,7 +445,7 @@ export default function SubmissionsScreen() {
                                         Submit Poll
                                     </Text>
                                 </TouchableOpacity>
-                            </View>
+                            </Animated.View>
 
                         </View>
                     </TouchableWithoutFeedback>

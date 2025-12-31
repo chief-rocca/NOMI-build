@@ -110,7 +110,10 @@ export default function ProfileScreen() {
                     {/* My Activity Section */}
                     <SectionHeader title="My Activity" />
                     <View className="pt-2">
-                        <MenuItem title="Voting History" />
+                        <MenuItem
+                            title="My Votes"
+                            onPress={() => router.push('/profile/my-votes')}
+                        />
                         <MenuItem
                             title="Analytics & Insights"
                             onPress={() => setShowAnalytics(true)}
@@ -137,7 +140,8 @@ export default function ProfileScreen() {
                     {/* Promotions Section */}
                     <SectionHeader title="Promotions" />
                     <View className="pt-2">
-                        <MenuItem title="Invite friends to NOMI" />
+                        <MenuItem title="Invite friends to NOMI" onPress={() => router.push('/coming-soon')} />
+                        <MenuItem title="Payments & Rewards" onPress={() => router.push('/coming-soon')} />
                     </View>
 
                     <View className="h-20" />

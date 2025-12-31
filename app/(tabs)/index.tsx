@@ -1,12 +1,18 @@
 import { PollData, SwipeablePollCard } from '@/components/SwipeablePollCard';
 import { useRouter } from 'expo-router';
-import { Flag, Globe, Layers, MapPin, UserCircle } from 'lucide-react-native';
+import { Flag, Globe, MapPin, UserCircle } from 'lucide-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, LayoutAnimation, RefreshControl, Image as RNImage, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { multiPollsData } from '../data/multipolls';
-import rawPolls from '../data/polls.json';
+import { multiPollsData } from '../../src/data/multipolls';
+import rawPolls from '../../src/data/polls.json';
+// Import Images
+const IMG_1 = require('../../assets/images/2025-02-21-inv-wiesbaden-map-promos-threeByTwoMediumAt2X-v9.webp');
+const IMG_2 = require('../../assets/images/30edsall-mlvj-videoLarge.webp');
+const IMG_3 = require('../../assets/images/30int-israel-ngo01-photo-qbcw-threeByTwoMediumAt2X.webp');
+
+const POLL_IMAGES = [IMG_1, IMG_2, IMG_3];
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -47,7 +53,7 @@ export default function HomeScreen() {
       National: ['New York, USA', 'London, UK', 'Tokyo, JP', 'Berlin, DE', 'Paris, FR'],
       Local: ['Brooklyn, NY', 'Shoreditch, LDN', 'Shibuya, JP', 'Kreuzberg, DE', 'Le Marais, FR']
     }
-    const statuses: ('pending' | 'voted' | 'skipped')[] = ['pending', 'pending', 'pending', 'voted', 'skipped']; // Weighted towards pending
+    const statuses: ('pending' | 'voted' | 'skipped')[] = ['pending']; // Always pending for Home feed
 
     let locationList = locations.Global;
     if (category === 'National') locationList = locations.National;
@@ -55,7 +61,9 @@ export default function HomeScreen() {
 
     return {
       location: locationList[Math.floor(Math.random() * locationList.length)],
-      status: statuses[Math.floor(Math.random() * statuses.length)]
+      status: statuses[Math.floor(Math.random() * statuses.length)],
+      // Random Image
+      image: POLL_IMAGES[Math.floor(Math.random() * POLL_IMAGES.length)]
     }
   }
 
@@ -82,7 +90,8 @@ export default function HomeScreen() {
             insightColor: colors[Math.floor(Math.random() * colors.length)],
             location: metadata.location,
             status: metadata.status,
-            type: 'binary'
+            type: 'binary',
+            image: metadata.image
           });
         });
       }
@@ -102,6 +111,7 @@ export default function HomeScreen() {
         location: metadata.location,
         status: 'pending',
         type: 'multi',
+        image: metadata.image,
         options: poll.options
       });
     });
@@ -155,6 +165,7 @@ export default function HomeScreen() {
 
   // Handle Swipe (Remove card from stack)
   const handleSwipe = (id: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setDisplayedPolls(current => current.filter(p => p.id !== id));
     // Also remove from master list if desired, but for visual stack this is enough
   };
@@ -192,8 +203,12 @@ export default function HomeScreen() {
             <Text className="text-2xl text-nomi-dark-text font-satoshi-bold">NOMI</Text>
           </View>
 
-          <TouchableOpacity>
-            <Globe size={28} color="#EAEAEA" />
+          <TouchableOpacity onPress={() => router.push('/stats/globe')}>
+            <RNImage
+              source={require('../../assets/images/earth_globe.png')}
+              style={{ width: 28, height: 28, borderRadius: 14 }}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -204,13 +219,12 @@ export default function HomeScreen() {
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
-            data={['Global', 'National', 'Local', 'Multi']}
+            data={['Global', 'National', 'Local']}
             keyExtractor={(item) => item}
             renderItem={({ item }) => {
               let Icon = Globe;
               if (item === 'National') Icon = Flag;
               if (item === 'Local') Icon = MapPin;
-              if (item === 'Multi') Icon = Layers;
               return <FilterPill label={item as any} icon={Icon} />;
             }}
           />
