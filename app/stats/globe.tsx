@@ -1,63 +1,56 @@
 import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
-import React, { useMemo } from 'react';
-import { Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle, useSharedValue, withDecay } from 'react-native-reanimated';
+import React, { useMemo, useRef } from 'react';
+import { StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const GLOBE_SIZE = SCREEN_WIDTH * 0.85;
+import { WebView } from 'react-native-webview';
+import { GLOBE_HTML } from '../../src/constants/globeHtml';
 
 export default function GlobeScreen() {
     const router = useRouter();
-    const rotation = useSharedValue(0);
+    const webViewRef = useRef<WebView>(null);
 
-    // Mock Stats Data tied to rotation
-    // In a real app, this would query based on coordinate mapping
-    const stats = useMemo(() => ([
-        { region: 'North America', users: '1.2M', votes: '8.5M', trend: '+12%' },
-        { region: 'Europe', users: '950K', votes: '6.2M', trend: '+8%' },
-        { region: 'Asia Pacific', users: '2.1M', votes: '15.3M', trend: '+22%' },
-        { region: 'Latin America', users: '600K', votes: '3.1M', trend: '+5%' },
-        { region: 'Africa', users: '450K', votes: '2.8M', trend: '+15%' },
+    // Mock Heatmap Data (approx. centers for demo)
+    const heatmapData = useMemo(() => ([
+        // South Africa (High Density)
+        { lat: -26.2041, lng: 28.0473, weight: 1.5 }, { lat: -26.1, lng: 28.1, weight: 1.2 }, { lat: -26.3, lng: 28.0, weight: 1.3 },
+        { lat: -33.9249, lng: 18.4241, weight: 1.2 }, { lat: -34.0, lng: 18.5, weight: 1.0 }, { lat: -33.8, lng: 18.4, weight: 0.9 },
+        { lat: -29.8587, lng: 31.0218, weight: 0.8 }, // Durban
+
+        // USA (East Coast)
+        { lat: 40.7128, lng: -74.0060, weight: 1.0 }, { lat: 40.8, lng: -74.1, weight: 0.8 }, { lat: 40.6, lng: -73.9, weight: 0.9 },
+        { lat: 38.9072, lng: -77.0369, weight: 0.7 }, // DC
+        { lat: 42.3601, lng: -71.0589, weight: 0.6 }, // Boston
+
+        // USA (West Coast)
+        { lat: 34.0522, lng: -118.2437, weight: 0.9 }, { lat: 37.7749, lng: -122.4194, weight: 0.8 },
+
+        // Europe
+        { lat: 51.5074, lng: -0.1278, weight: 0.8 }, { lat: 51.4, lng: -0.1, weight: 0.6 }, // London
+        { lat: 48.8566, lng: 2.3522, weight: 0.7 }, // Paris
+        { lat: 52.5200, lng: 13.4050, weight: 0.6 }, // Berlin
+        { lat: 41.9028, lng: 12.4964, weight: 0.5 }, // Rome
+
+        // Asia
+        { lat: 35.6762, lng: 139.6503, weight: 0.9 }, // Tokyo
+        { lat: 37.5665, lng: 126.9780, weight: 0.7 }, // Seoul
+        { lat: 1.3521, lng: 103.8198, weight: 0.8 }, // Singapore
+
+        // Mobile / South America
+        { lat: -23.5505, lng: -46.6333, weight: 0.7 }, // Sao Paulo
+        { lat: -34.6037, lng: -58.3816, weight: 0.6 }, // Buenos Aires
+
+        // Oceania
+        { lat: -33.8688, lng: 151.2093, weight: 0.7 }, // Sydney
     ]), []);
 
-    // Derived value to cycle through stats based on rotation
-    // We normalize rotation to an index
-    const activeStatIndex = useSharedValue(0);
-
-    const savedRotation = useSharedValue(0);
-
-    const pan = Gesture.Pan()
-        .onStart(() => {
-            savedRotation.value = rotation.value;
-        })
-        .onUpdate((e) => {
-            rotation.value = savedRotation.value + (e.translationX / 2);
-        })
-        .onEnd((e) => {
-            rotation.value = withDecay({ velocity: e.velocityX / 2, deceleration: 0.995 });
-        });
-
-    const globeStyle = useAnimatedStyle(() => ({
-        transform: [{ rotateY: `${rotation.value}deg` }]
-    }));
-
-    // Parallax effect for "texture" moving inside the masked circle
-    const textureStyle = useAnimatedStyle(() => ({
-        transform: [{ translateX: rotation.value % GLOBE_SIZE }]
-    }));
-
-    // Dynamic Text
-    // Note: Reanimated strings are tricky, so we use a simpler approach for the MVP:
-    // We render all stats and fade them in/out based on index
+    // Data injection now handled in onLoadEnd
 
     return (
         <View className="flex-1 bg-black">
             <StatusBar barStyle="light-content" />
-            <SafeAreaView className="flex-1">
-                {/* Header */}
+            <SafeAreaView className="flex-1" edges={['top']}>
+                {/* Header Overlay */}
                 <View className="absolute top-12 left-6 z-50">
                     <TouchableOpacity
                         onPress={() => router.back()}
@@ -67,141 +60,52 @@ export default function GlobeScreen() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Main Content */}
-                <View className="flex-1 items-center justify-center">
-                    <Text className="text-white text-xs font-bold uppercase tracking-[0.3em] mb-12 opactiy-50">
-                        Global Activity Map
+                {/* Title Overlay */}
+                <View className="absolute top-16 w-full items-center z-40 pointer-events-none">
+                    <Text className="text-white text-xs font-bold uppercase tracking-[0.3em] opacity-80">
+                        Global Vote Heatmap
                     </Text>
+                </View>
 
-                    {/* Globe Container */}
-                    <GestureDetector gesture={pan}>
-                        <View style={styles.globeContainer}>
-                            <View style={styles.globeMask}>
-                                {/* The "Texture" - we tile the image to allow continuous scroll */}
-                                <Animated.View style={[{ flexDirection: 'row', width: GLOBE_SIZE * 4 }, textureStyle]}>
-                                    <Image
-                                        source={require('../../assets/images/earth_globe.png')}
-                                        style={styles.globeImage}
-                                        resizeMode="cover"
-                                    />
-                                    <Image
-                                        source={require('../../assets/images/earth_globe.png')}
-                                        style={styles.globeImage}
-                                        resizeMode="cover"
-                                    />
-                                </Animated.View>
-                                {/* Shadow Overlay for Sphere effect */}
-                                <View style={styles.shadowOverlay} />
-                            </View>
+                {/* WebView Container */}
+                <View className="flex-1 rounded-3xl overflow-hidden my-4 mx-2 border border-gray-900">
+                    <WebView
+                        ref={webViewRef}
+                        originWhitelist={['*']}
+                        source={{ html: GLOBE_HTML, baseUrl: '' }}
+                        style={{ flex: 1, backgroundColor: 'black' }}
+                        scrollEnabled={false}
+                        onLoadEnd={() => {
+                            const script = `if (window.updateGlobeData) { window.updateGlobeData(${JSON.stringify(heatmapData)}); } else { console.error("updateGlobeData missing"); } true;`;
+                            webViewRef.current?.injectJavaScript(script);
+                        }}
+                        onMessage={(event) => {
+                            try {
+                                const data = JSON.parse(event.nativeEvent.data);
+                                if (data.type === 'CONSOLE') {
+                                    console.log(`[WebView \${data.logType}]:`, ...data.args);
+                                }
+                            } catch (e) {
+                                // console.log('WebView Message:', event.nativeEvent.data);
+                            }
+                        }}
+                    />
+                </View>
 
-                            {/* Glow behind */}
-                            <View style={styles.glow} />
+                {/* Stats Overlay Logic can remain mocked or removed if heatmap is self-explanatory */}
+                <View className="absolute bottom-12 left-6 right-6">
+                    <View className="flex-row justify-between bg-gray-900/80 p-6 rounded-2xl border border-gray-800">
+                        <View>
+                            <Text className="text-gray-400 text-xs font-bold uppercase mb-1">Active Citizens</Text>
+                            <Text className="text-white text-3xl font-satoshi-bold">4.2M</Text>
                         </View>
-                    </GestureDetector>
-
-                    {/* Stats Overlay */}
-                    <View className="mt-16 w-full px-8">
-                        {stats.map((stat, index) => (
-                            <StatBlock
-                                key={index}
-                                item={stat}
-                                index={index}
-                                activeIndex={activeStatIndex}
-                            />
-                        ))}
+                        <View className="items-end">
+                            <Text className="text-gray-400 text-xs font-bold uppercase mb-1">Votes Today</Text>
+                            <Text className="text-nomi-primary text-3xl font-satoshi-bold">12.8M</Text>
+                        </View>
                     </View>
-
-                    <Text className="text-gray-500 text-xs mt-8">
-                        Swipe to rotate & explore
-                    </Text>
                 </View>
             </SafeAreaView>
         </View>
     );
 }
-
-const StatBlock = ({ item, index, activeIndex }: { item: any, index: number, activeIndex: Animated.SharedValue<number> }) => {
-    const style = useAnimatedStyle(() => {
-        // We read the shared value. 
-        // Note: For perfect sync, we might need runOnJS or Derived values, 
-        // but checking basic range is often enough for simple carousel logic.
-        // Let's use interpolation for a smooth fade transition window.
-
-        // Since activeIndex is updated imperatively in the gesture, it might be jumpy.
-        // Better: use rotation value directly.
-
-        // Simpler fallback for MVP:
-        // We just always show Global stats or make it static for now if complex to link seamlessly.
-        // But let's try to simulate checking shared value match.
-        // This is a bit advanced for rapid MVP, so let's stick to a static "Global" generic stat 
-        // if this proves unstable, but I'll try to just show one static customized block for now
-        // to ensure it works reliable without flickering.
-        return {
-            opacity: 1 // for now
-        };
-    });
-
-    // Actually, let's just render ONE main stats block that is generic "Global" for this MVP
-    // as true rotation-mapped data requires complex texture mapping logic.
-    if (index !== 0) return null;
-
-    return (
-        <View className="flex-row justify-between bg-gray-900/80 p-6 rounded-2xl border border-gray-800">
-            <View>
-                <Text className="text-gray-400 text-xs font-bold uppercase mb-1">Active Citizens</Text>
-                <Text className="text-white text-3xl font-satoshi-bold">4.2M</Text>
-            </View>
-            <View className="items-end">
-                <Text className="text-gray-400 text-xs font-bold uppercase mb-1">Votes Today</Text>
-                <Text className="text-nomi-primary text-3xl font-satoshi-bold">12.8M</Text>
-            </View>
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    globeContainer: {
-        width: GLOBE_SIZE,
-        height: GLOBE_SIZE,
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 10,
-    },
-    globeMask: {
-        width: GLOBE_SIZE,
-        height: GLOBE_SIZE,
-        borderRadius: GLOBE_SIZE / 2,
-        overflow: 'hidden',
-        backgroundColor: '#001a33', // Deep ocean
-        borderWidth: 1,
-        borderColor: 'rgba(255,255,255,0.1)',
-        position: 'relative',
-    },
-    globeImage: {
-        width: GLOBE_SIZE * 2, // Double width for scrolling
-        height: GLOBE_SIZE,
-    },
-    shadowOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        borderRadius: GLOBE_SIZE / 2,
-        backgroundColor: 'transparent',
-        shadowColor: '#000',
-        shadowOffset: { width: -20, height: 10 },
-        shadowOpacity: 0.5,
-        shadowRadius: 40,
-        // Inset shadow simulation using a semi-transparent gradient overlay could go here
-        // For simplified app, we use a radial gradient overlay image or just opacity
-        // Using a simple dark overlay on edges:
-        borderWidth: 0,
-    },
-    glow: {
-        position: 'absolute',
-        width: GLOBE_SIZE * 1.2,
-        height: GLOBE_SIZE * 1.2,
-        borderRadius: (GLOBE_SIZE * 1.2) / 2,
-        backgroundColor: '#4facfe',
-        opacity: 0.15,
-        zIndex: -1,
-        // blurRadius: 40, // Only works on some views or need Expo Blur
-    }
-});
