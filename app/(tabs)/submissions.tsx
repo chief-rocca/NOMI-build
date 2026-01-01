@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { Check, ClipboardList, Flag, Globe, MapPin, Plus, Search, UserCircle, X } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import {
+    Image,
     Keyboard,
     KeyboardAvoidingView,
     Platform,
@@ -245,8 +246,12 @@ export default function SubmissionsScreen() {
                             <Text className="text-2xl text-nomi-dark-text font-satoshi-bold">NOMI</Text>
                         </View>
 
-                        <TouchableOpacity>
-                            <Globe size={28} color="#EAEAEA" />
+                        <TouchableOpacity onPress={() => router.push('/stats/globe' as any)}>
+                            <Image
+                                source={require('../../assets/images/earth_globe.png')}
+                                style={{ width: 28, height: 28, borderRadius: 14 }}
+                                resizeMode="cover"
+                            />
                         </TouchableOpacity>
                     </View>
                 </Animated.View>

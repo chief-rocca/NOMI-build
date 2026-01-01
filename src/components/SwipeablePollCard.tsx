@@ -21,6 +21,7 @@ export interface PollData {
     options?: string[];
     variant?: 'default' | 'sponsored';
     image?: any; // Image source (require or uri)
+    userChoice?: 'agree' | 'disagree';
 }
 
 interface Props {
@@ -383,42 +384,7 @@ export const SwipeablePollCard = ({ poll, onSwipeLeft, onSwipeRight }: Props) =>
                         poll.variant === 'sponsored' && styles.sponsoredCard
                     ]}
                 >
-                    {/* Binary Result Overlay (If Voted) */}
-                    {isVoted && (
-                        <View className="absolute inset-0 z-50 rounded-3xl overflow-hidden justify-center">
-                            {/* Darken background slightly */}
-                            <View className="absolute inset-0 bg-black/60" />
 
-                            {/* Results Bar Container */}
-                            <View className="mx-6">
-                                <View className="flex-row justify-between mb-2">
-                                    <Text className="text-white font-bold text-lg">AGREE</Text>
-                                    <Text className="text-white font-bold text-lg">DISAGREE</Text>
-                                </View>
-
-                                {/* The Bar */}
-                                <View className="h-4 w-full flex-row rounded-full overflow-hidden">
-                                    <View
-                                        style={{
-                                            flex: binaryStats.agree,
-                                            backgroundColor: binaryStats.agree >= binaryStats.disagree ? '#FFA000' : '#6CB4EE'
-                                        }}
-                                    />
-                                    <View
-                                        style={{
-                                            flex: binaryStats.disagree,
-                                            backgroundColor: binaryStats.disagree > binaryStats.agree ? '#FFA000' : '#6CB4EE'
-                                        }}
-                                    />
-                                </View>
-
-                                <View className="flex-row justify-between mt-2">
-                                    <Text className="text-white font-bold text-2xl">{binaryStats.agree}%</Text>
-                                    <Text className="text-white font-bold text-2xl">{binaryStats.disagree}%</Text>
-                                </View>
-                            </View>
-                        </View>
-                    )}
 
                     {!isVoted && (
                         <View style={{ pointerEvents: 'none', zIndex: 100, ...StyleSheet.absoluteFillObject }}>
@@ -479,6 +445,47 @@ export const SwipeablePollCard = ({ poll, onSwipeLeft, onSwipeRight }: Props) =>
                                 </View>
                             </View>
                         </View>
+
+                        {/* Binary Result Inline (If Voted) */}
+                        {isVoted && (
+                            <View className="mt-6 pt-4 border-t border-gray-800">
+                                <View className="flex-row justify-between mb-2">
+                                    <Text className="text-white font-bold text-sm text-gray-400">AGREED</Text>
+                                    <Text className="text-white font-bold text-sm text-gray-400">DISAGREED</Text>
+                                </View>
+
+                                {/* The Bar */}
+                                <View className="h-4 w-full flex-row rounded-full overflow-hidden mb-2 relative">
+                                    <View
+                                        className="justify-center items-center"
+                                        style={{
+                                            flex: binaryStats.agree,
+                                            backgroundColor: binaryStats.agree >= binaryStats.disagree ? '#FFA000' : '#6CB4EE'
+                                        }}
+                                    >
+                                        {poll.userChoice === 'agree' && (
+                                            <View className="w-2 h-2 rounded-full bg-white shadow-sm" />
+                                        )}
+                                    </View>
+                                    <View
+                                        className="justify-center items-center"
+                                        style={{
+                                            flex: binaryStats.disagree,
+                                            backgroundColor: binaryStats.disagree > binaryStats.agree ? '#FFA000' : '#6CB4EE'
+                                        }}
+                                    >
+                                        {poll.userChoice === 'disagree' && (
+                                            <View className="w-2 h-2 rounded-full bg-white shadow-sm" />
+                                        )}
+                                    </View>
+                                </View>
+
+                                <View className="flex-row justify-between">
+                                    <Text className="text-white font-bold text-xl">{binaryStats.agree}%</Text>
+                                    <Text className="text-white font-bold text-xl">{binaryStats.disagree}%</Text>
+                                </View>
+                            </View>
+                        )}
                     </View>
 
                 </Animated.View>

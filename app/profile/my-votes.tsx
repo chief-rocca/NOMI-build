@@ -25,13 +25,14 @@ export default function MyVotesScreen() {
                 : "Should AI be regulated more strictly by governments?",
             category: i % 3 === 0 ? 'Technology' : 'Lifestyle',
             votes: Math.floor(Math.random() * 50000) + 5000,
-            timeRemaining: 'Ended',
+            timeRemaining: i % 3 === 0 ? 'Ended' : `${Math.floor(Math.random() * 48) + 1}h left`,
             insight: 'Completed',
             insightColor: 'gray',
             status: 'voted',
             type: i % 4 === 0 ? 'multi' : 'binary', // Mix types
             image: POLL_IMAGES[i % POLL_IMAGES.length],
-            options: i % 4 === 0 ? ['Yes, absolutely', 'No, not at all', 'It depends', 'Unsure'] : undefined
+            options: i % 4 === 0 ? ['Yes, absolutely', 'No, not at all', 'It depends', 'Unsure'] : undefined,
+            userChoice: Math.random() > 0.5 ? 'agree' : 'disagree'
         }));
     }, []);
 

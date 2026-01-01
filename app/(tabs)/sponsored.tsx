@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
-import { Gift, Globe, ScrollText, UserCircle } from 'lucide-react-native';
+import { Gift, ScrollText, UserCircle } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { FlatList, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SwipeablePollCard } from '../../src/components/SwipeablePollCard';
@@ -79,8 +79,12 @@ export default function SponsoredScreen() {
                             <Text className="text-2xl text-nomi-dark-text font-satoshi-bold">NOMI</Text>
                         </View>
 
-                        <TouchableOpacity>
-                            <Globe size={28} color="#EAEAEA" />
+                        <TouchableOpacity onPress={() => router.push('/stats/globe' as any)}>
+                            <Image
+                                source={require('../../assets/images/earth_globe.png')}
+                                style={{ width: 28, height: 28, borderRadius: 14 }}
+                                resizeMode="cover"
+                            />
                         </TouchableOpacity>
                     </View>
                 </Animated.View>
