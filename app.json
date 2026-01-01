@@ -9,13 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/app_icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.NOMI"
+      "bundleIdentifier": "com.nomi.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +30,7 @@
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT"
       ],
-      "package": "com.anonymous.NOMI"
+      "package": "com.nomi.app"
     },
     "web": {
       "bundler": "metro",
