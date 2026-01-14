@@ -1,0 +1,69 @@
+1. Lead Qualification: Real Estate (Binary)
+Brand: Luxury Developer (e.g., Balwin / Steyn City) Question: "Are you planning to purchase or relocate to a new primary residence within the next 12 months?"
+
+Type: Binary (Yes / No)
+
+Goal: Identifies high-intent buyers for immediate follow-up ads.
+
+2. Ad Recall: Beverage/FMCG (Binary)
+Brand: Premium Liquor or Soft Drink (e.g., Heineken / Coca-Cola) Question: "Have you noticed our new 'Summer Vibes' digital billboard at the entrance of [Local Mall Name] this week?"
+
+Type: Binary (Yes / No)
+
+Goal: Uses GPS data to verify if physical advertising spend is actually being "seen" by the target demographic.
+
+3. Sentiment Mapping: Banking (Rating Scale 1-5)
+Brand: Digital Bank (e.g., TymeBank / Discovery Bank) Question: "On a scale of 1 to 5, how satisfied are you with your current bank's ability to handle international travel payments?"
+
+Type: Linear Scale (1 = Frustrated, 5 = Seamless)
+
+Goal: Finds "unhappy" customers from competitors to target with "Switching" incentives.
+
+4. Product Validation: Insurance (Binary)
+Brand: Insurtech (e.g., Naked / Pineapple) Question: "Would you be interested in 'Pay-as-you-drive' insurance that lowers your premium for every day your car stays in your garage?"
+
+Type: Binary (Yes / No)
+
+Goal: Validates a new product feature before the brand spends millions on development.
+
+5. Infrastructure Audit: ISP/Telecom (Binary)
+Brand: Fiber Provider (e.g., Vuma / MetroFibre) Question: "Are you currently experiencing more than 3 hours of unplanned internet downtime per week at your registered address?"
+
+Type: Binary (Yes / No)
+
+Goal: Identifies "neighborhoods of discontent" where a rival ISP can move in and offer better service.
+
+6. Net Promoter Score (NPS): Retail (Rating Scale 1-10)
+Brand: Major Retailer (e.g., Woolworths / Checkers) Question: "How likely are you to recommend the [Branch Name] Fresh Produce section to a friend or neighbor?"
+
+Type: NPS Scale (1-10)
+
+Goal: Allows the store manager of that specific location to see real-time performance data from locals.
+
+7. Lifestyle Budgeting: Fintech (Binary)
+Brand: Investment Platform (e.g., EasyEquities) Question: "Do you currently invest more than R500 a month into offshore (US/EU) stock markets?"
+
+Type: Binary (Yes / No)
+
+Goal: Segments users into "Beginner" vs "Sophisticated" investors for targeted educational content.
+
+8. Market Share: Home Security (Binary)
+Brand: Security Tech (e.g., ADT / Fidelity) Question: "Is your home currently equipped with an AI-linked camera system that notifies your smartphone of intruders?"
+
+Type: Binary (Yes / No)
+
+Goal: Determines market saturation of "Smart" security vs traditional "Alarm-only" systems.
+
+9. UX Feedback: E-commerce (Rating Scale 1-5)
+Brand: Fashion Retailer (e.g., Superbalist / Bash) Question: "Rate the ease of the 'Returns' process for your last online clothing order."
+
+Type: Linear Scale (1 = Difficult, 5 = Effortless)
+
+Goal: Identifies friction points in the customer journey that lead to churn.
+
+10. Future Intent: Automotive (Binary)
+Brand: Car Manufacturer (e.g., Toyota / BMW) Question: "If a public 20-minute 'Fast Charger' was installed at your local petrol station, would you consider an EV for your next car?"
+
+Type: Binary (Yes / No)
+
+Goal: Measures "Range Anxiety" vs "Infrastructure Needs" in specific South African metros.

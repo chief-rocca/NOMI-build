@@ -4,29 +4,42 @@
     "slug": "NOMI",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/nomi-icon.png",
     "scheme": "nomi",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/app_icon.png",
+      "image": "./assets/images/nomi-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nomi.app"
+      "bundleIdentifier": "com.nomi.app",
+      "icon": "./assets/images/nomi-icon.png",
+      "splash": {
+        "image": "./assets/images/nomi-icon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      },
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
+      "icon": "./assets/images/nomi-icon.png",
+      "splash": {
+        "image": "./assets/images/nomi-icon.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000"
+      },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/nomi-icon.png",
+        "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
-        "android.permission.USE_BIOMETRIC",
-        "android.permission.USE_FINGERPRINT",
         "android.permission.USE_BIOMETRIC",
         "android.permission.USE_FINGERPRINT"
       ],
@@ -48,6 +61,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1dc1cbaa-574e-4723-93aa-c1ce5b7377d2"
+      }
     }
   }
 }
